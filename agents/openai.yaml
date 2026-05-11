@@ -1,0 +1,8 @@
+interface:
+  display_name: "SwiftUI App Craft"
+  short_description: "Builds and reviews iOS SwiftUI apps with modern project-ready defaults."
+  brand_color: "#0A84FF"
+  default_prompt: "Use $swiftui-app-craft to build, review, or refactor my iOS SwiftUI project."
+
+policy:
+  allow_implicit_invocation: true
