@@ -207,15 +207,6 @@ Use `ModelContext.fetchCount()` when only a count is needed and live updates are
 
 Prefer model types that conform to `Identifiable` over scattering `id:` key paths through view code.
 
-## SwiftData With CloudKit
-
-When a SwiftData model syncs through CloudKit:
-
-- Do not use `@Attribute(.unique)`.
-- Every model property needs a default value or optional type.
-- Relationships need optional types.
-- Validate migrations carefully because CloudKit-backed model changes have less room for casual schema churn.
-
 ## Data Flow Review Checklist
 
 - [ ] Ownership is clear from wrappers.
@@ -227,4 +218,3 @@ When a SwiftData model syncs through CloudKit:
 - [ ] Derived state is not stale.
 - [ ] Environment models are intentional and not overused in repeated rows.
 - [ ] SwiftData live vs non-live data needs are explicit.
-

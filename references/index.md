@@ -15,10 +15,13 @@ This folder is the copy-pasteable iOS SwiftUI reference pack. It intentionally f
 | File | Use for |
 |---|---|
 | `api-modernization.md` | Deprecated APIs, iOS version transitions, modern SwiftUI replacements, iOS 26 APIs |
-| `state-data-flow.md` | Observation, property wrappers, bindings, environment models, SwiftData, CloudKit constraints |
+| `mvvm.md` | Practical SwiftUI MVVM boundaries, view model design, dependency injection, testing, anti-patterns |
+| `state-data-flow.md` | Observation, property wrappers, bindings, environment models, and SwiftData state rules |
+| `swiftdata-migrations.md` | SwiftData usage with MVVM, `@Query`, `ModelContext`, repositories, versioned schemas, migrations |
 | `view-composition.md` | View body structure, extraction, identity, containers, styling, UIKit bridges |
 | `navigation-presentation.md` | NavigationStack, NavigationSplitView for iPad, paths, sheets, alerts, dialogs, popovers |
 | `lists-scroll.md` | ForEach identity, List, Table, lazy stacks, empty states, scroll APIs, row dependencies |
+| `performantSwiftUIListing.md` | Deep iOS 17+ guide for performant vertical and horizontal lists, row identity, data shaping, and listing anti-patterns |
 | `layout-design.md` | Relative layout, system controls, forms, labels, spacing, styling, design consistency |
 | `performance.md` | Redraw control, hot paths, lazy loading, view dependencies, body cost, advanced diffing |
 | `animations.md` | Implicit and explicit animation, transitions, matched geometry, transactions, phase/keyframes |

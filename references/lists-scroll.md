@@ -2,6 +2,8 @@
 
 Repeated content is where SwiftUI identity and dependency mistakes become expensive. Stable identity, narrow row inputs, and careful transforms matter.
 
+For the deeper company-standard guide to building vertical and horizontal iOS 17+ listing UIs, including common anti-patterns and preferred patterns, read `performantSwiftUIListing.md`.
+
 ## Stable Identity
 
 Prefer `Identifiable` data:
@@ -216,4 +218,3 @@ Avoid `AnyView` in rows. Use builders or concrete row types.
 - [ ] Rows have narrow inputs.
 - [ ] Empty states use system components where appropriate.
 - [ ] Scroll state updates are throttled by meaning, not every tiny movement.
-

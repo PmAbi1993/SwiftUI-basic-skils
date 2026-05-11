@@ -30,9 +30,12 @@ Start with `references/index.md`, then load the relevant topic files:
 | Build a feature or screen | `api-modernization.md`, `state-data-flow.md`, then UI topic files |
 | Review SwiftUI code | `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
 | Modernize deprecated code | `api-modernization.md`, plus affected topic files |
+| Design or review MVVM structure | `mvvm.md`, `state-data-flow.md`, `view-composition.md` |
 | Fix state or data flow | `state-data-flow.md`, `performance.md` |
+| SwiftData storage, fetching, or migrations | `swiftdata-migrations.md`, `state-data-flow.md`, `mvvm.md` |
 | Navigation, sheets, alerts, dialogs | `navigation-presentation.md` |
 | Lists, tables, scrolling, empty states | `lists-scroll.md`, `performance.md` |
+| High-performance vertical or horizontal listing | `performantSwiftUIListing.md`, `lists-scroll.md`, `performance.md` |
 | Layout and visual system consistency | `layout-design.md`, `view-composition.md` |
 | Animation or transitions | `animations.md`, `performance.md` |
 | Focus, keyboard, search, form input | `focus-input.md`, `api-modernization.md` |
