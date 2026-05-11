@@ -1,69 +1,98 @@
 # State, Data Flow, and SwiftData
 
-Design data flow before view structure. The main question is ownership: who creates the value, who reads it, and who writes it?
+SwiftUI data flow should make ownership obvious. Most bugs in SwiftUI screens come from using the right-looking wrapper in the wrong ownership position.
 
-## Property Wrapper Guide
+## Ownership Decision Table
 
-| Wrapper | Use when |
+| Situation | Preferred choice |
 |---|---|
-| `@State` | The view owns simple local state or owns an `@Observable` instance. Mark it `private`. |
-| `@Binding` | A child view must mutate parent-owned state. |
-| `@Bindable` | A view receives an `@Observable` model and needs bindings to its properties. |
-| `@Environment` | A value or observable model is intentionally shared across a subtree. |
-| `let` | A child receives read-only data. |
-| `var` | A child receives read-only data and reacts with `.onChange()`. |
+| View owns simple mutable UI state | `@State private var value` |
+| View owns an observable model | `@State private var model = Model()` |
+| Child needs to mutate parent state | `@Binding var value` |
+| Child only reads parent value | `let value` |
+| Child reads parent value and reacts to changes | `var value` plus `.onChange()` |
+| Child receives observable model and needs bindings | `@Bindable var model: Model` |
+| Many descendants need shared model | inject observable model with `.environment(model)` and read with `@Environment(Model.self)` |
+| Legacy owned object | `@StateObject private var model` |
+| Legacy injected object | `@ObservedObject var model` |
 
-Legacy wrappers:
+## Core Rules
 
-| Wrapper | Use when |
-|---|---|
-| `@StateObject` | The view owns a legacy `ObservableObject`. Prefer `@Observable` for new code. |
-| `@ObservedObject` | The view receives a legacy `ObservableObject`. |
-| `@EnvironmentObject` | Existing legacy environment object usage. Prefer observable models for new code. |
+- New shared mutable state should use `@Observable`.
+- `@Observable` UI models should be main-actor isolated unless the project uses Main Actor default isolation.
+- Use `@State`, not `@StateObject`, to own an `@Observable` instance.
+- View-owned `@State` and legacy `@StateObject` should be `private`.
+- Do not declare parent-provided values as `@State` or `@StateObject`; they capture only the initial value.
+- Use `@Binding` only when the child writes the value.
+- Use `@Bindable` only when the child receives an observable model and needs bindings to properties.
+- Avoid storing derived state unless you control invalidation.
 
-## Observation Defaults
-
-Prefer `@Observable` classes for shared mutable state:
+## Observable Model Pattern
 
 ```swift
 @Observable
 @MainActor
-final class ProfileModel {
-    var name = ""
+final class AccountEditorModel {
+    var displayName = ""
     var isSaving = false
-}
 
-struct ProfileView: View {
-    @State private var model = ProfileModel()
-
-    var body: some View {
-        EditProfileView(model: model)
+    func save() async throws {
+        isSaving = true
+        defer { isSaving = false }
+        // Save through service.
     }
 }
 
-struct EditProfileView: View {
-    @Bindable var model: ProfileModel
+struct AccountEditorScreen: View {
+    @State private var model = AccountEditorModel()
 
     var body: some View {
-        TextField("Name", text: $model.name)
+        AccountEditorForm(model: model)
+    }
+}
+
+struct AccountEditorForm: View {
+    @Bindable var model: AccountEditorModel
+
+    var body: some View {
+        TextField("Display Name", text: $model.displayName)
     }
 }
 ```
 
-If the project enables Main Actor default isolation, explicit `@MainActor` on UI models may be redundant. Otherwise, shared UI models should be main-actor isolated.
+Why `@State` owns the model: SwiftUI recreates view values often. `@State` preserves the model instance across redraws.
 
-## State Rules
+## Passed Values Are Not State
 
-- View-owned state is `private`.
-- Parent-provided values are never `@State`; use `let`, `var`, `@Binding`, or `@Bindable`.
-- A child should not receive a binding just to read a value.
-- Avoid creating observable objects inline in `body`.
-- If a view owns an observable class, store it in `@State` so redraws preserve the instance.
-- Do not store derived values in `@State` unless you also own explicit invalidation.
+Wrong:
+
+```swift
+struct ProfileHeader: View {
+    @State var user: User
+
+    var body: some View {
+        Text(user.name)
+    }
+}
+```
+
+Correct:
+
+```swift
+struct ProfileHeader: View {
+    let user: User
+
+    var body: some View {
+        Text(user.name)
+    }
+}
+```
+
+If the child edits the value, pass a binding. If it edits properties on an observable model, pass the model and use `@Bindable`.
 
 ## Bindings
 
-Avoid `Binding(get:set:)` inside view bodies when a simpler source binding plus `.onChange()` works:
+Avoid manual `Binding(get:set:)` in view bodies when a normal binding plus change reaction works:
 
 ```swift
 TextField("Username", text: $model.username)
@@ -72,43 +101,130 @@ TextField("Username", text: $model.username)
     }
 ```
 
-For numeric entry, bind to the numeric value and use a format initializer:
+Manual bindings are acceptable at API boundaries, but they should not become a habit for basic form plumbing.
+
+Numeric entry should bind to numeric values:
 
 ```swift
 TextField("Score", value: $score, format: .number)
     .keyboardType(.numberPad)
 ```
 
-## Environment
+The keyboard modifier alone does not make a text binding numeric.
 
-Use observable environment models for app-wide state only when broad sharing is intended:
+## Let vs Var for Inputs
+
+Use `let` for read-only display:
+
+```swift
+struct BookRow: View {
+    let book: Book
+
+    var body: some View {
+        Text(book.title)
+    }
+}
+```
+
+Use `var` when the view reacts to parent-provided changes:
+
+```swift
+struct SearchResults: View {
+    var query: String
+    @State private var resultCount = 0
+
+    var body: some View {
+        ResultsList(query: query)
+            .onChange(of: query) { _, newQuery in
+                resultCount = calculateCount(for: newQuery)
+            }
+    }
+}
+```
+
+## Environment Models
+
+Use environment models for state intentionally shared across a feature or app subtree:
 
 ```swift
 @Observable
 @MainActor
 final class SessionModel {
-    var user: User?
+    var currentUser: User?
 }
 
 RootView()
     .environment(SessionModel())
 ```
 
-Avoid storing frequently changing values in the environment because broad readers add update cost.
+Read it where needed:
+
+```swift
+struct AccountMenu: View {
+    @Environment(SessionModel.self) private var session
+
+    var body: some View {
+        Text(session.currentUser?.name ?? "Guest")
+    }
+}
+```
+
+Avoid putting highly volatile values in environment state. Even when a specific key is not read everywhere, broad environment dependency checking can become expensive in large repeated trees.
 
 ## Property Wrappers Inside Observable Models
 
-Avoid property wrappers such as `@AppStorage`, `@SceneStorage`, and `@Query` directly inside `@Observable` models. If legacy code requires one, mark it `@ObservationIgnored` and expose plain observed properties for UI updates.
+Property wrappers such as `@AppStorage`, `@SceneStorage`, and `@Query` transform storage. `@Observable` also transforms storage. If existing code uses a wrapper inside an observable model, isolate it with `@ObservationIgnored` and expose a plain observed property for UI state when needed.
 
-Never store usernames, passwords, tokens, or other secrets in `@AppStorage`.
+Avoid using `@AppStorage` as the source of truth inside observable models. In particular, do not use it for secrets or sensitive user data.
 
-## SwiftData Notes
+## Legacy ObservableObject
 
-- Use `@Query` in views when live updates are needed.
-- Use `ModelContext.fetchCount()` only when a non-live count is acceptable or another update source refreshes the UI.
-- Prefer identifiable model data over ad hoc IDs in view code.
-- For SwiftData with CloudKit:
-  - Do not use `@Attribute(.unique)`.
-  - Model properties need default values or optional types.
-  - Relationships need optional types.
+Legacy wrappers are not automatically wrong. They are acceptable when:
+
+- The project already uses Combine-based models.
+- A dependency still exposes `ObservableObject`.
+- Rewriting would expand the scope beyond the task.
+
+Rules for legacy code:
+
+- Use `@StateObject` only when the view creates and owns the object.
+- Use `@ObservedObject` only when the object is injected.
+- Never create an injected object inline with `@ObservedObject`.
+- If a custom initializer creates `@StateObject`, pass the expression directly to `StateObject(wrappedValue:)` so creation stays deferred.
+- If `ObservableObject` is required for Combine publishers, ensure `import Combine` exists where needed.
+
+## Nested Models
+
+Nested legacy `ObservableObject` changes are not automatically observed through the parent. Pass nested objects directly to child views or migrate to Observation when practical.
+
+Observation handles nested observable objects more naturally, but broad dependencies still matter. Passing narrow values can be better than passing a whole model.
+
+## SwiftData
+
+Use `@Query` in views when live model updates should drive UI.
+
+Use `ModelContext.fetchCount()` when only a count is needed and live updates are not required from that call alone. If the UI must refresh automatically, pair the count with another state or query that invalidates the view.
+
+Prefer model types that conform to `Identifiable` over scattering `id:` key paths through view code.
+
+## SwiftData With CloudKit
+
+When a SwiftData model syncs through CloudKit:
+
+- Do not use `@Attribute(.unique)`.
+- Every model property needs a default value or optional type.
+- Relationships need optional types.
+- Validate migrations carefully because CloudKit-backed model changes have less room for casual schema churn.
+
+## Data Flow Review Checklist
+
+- [ ] Ownership is clear from wrappers.
+- [ ] View-owned state is private.
+- [ ] Parent-provided values are not stored as state.
+- [ ] Bindings imply real mutation.
+- [ ] Observable UI models are isolated to the main actor or covered by project default isolation.
+- [ ] Manual bindings are limited to boundary cases.
+- [ ] Derived state is not stale.
+- [ ] Environment models are intentional and not overused in repeated rows.
+- [ ] SwiftData live vs non-live data needs are explicit.
 

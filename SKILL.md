@@ -1,88 +1,84 @@
 ---
 name: swiftui-app-craft
-description: Build, review, and refactor iOS SwiftUI apps with modern SwiftUI APIs, Swift 6.2 defaults, Observation, state/data flow, navigation, layout, animations, Liquid Glass, SwiftData, performance, and Swift hygiene.
+description: Build, review, and refactor iOS SwiftUI apps using a deep combined reference pack for modern APIs, Observation, SwiftData, navigation, layout, lists, scrolling, animation, Liquid Glass, performance, image/text handling, and Swift 6.2 hygiene.
 metadata:
-  short-description: iOS SwiftUI app build and review coach
+  short-description: Deep iOS SwiftUI app craft reference pack
 ---
 
 # SwiftUI App Craft
 
-Use this skill when building, reviewing, or refactoring iOS SwiftUI app code. Be a decisive project coach: favor modern native SwiftUI, preserve existing project conventions, and report only issues that matter for correctness, maintainability, product quality, or performance.
+Use this skill for iOS SwiftUI app implementation, review, modernization, and refactoring. It combines the practical review strictness of SwiftUI Pro with the broader technical coverage of SwiftUI Expert, narrowed to iOS project work.
 
-## Operating Rules
+The `references/` folder is the main product. Load only the files needed for the task, but prefer the detailed references over improvising from memory.
 
-- Assume iOS 26+ and Swift 6.2+ for new code unless the project declares a lower target.
-- Prefer SwiftUI-native APIs. Use UIKit only when the project already uses it, SwiftUI has no suitable API, or the user asks for it.
-- Do not add third-party frameworks without asking.
-- Keep business logic out of view bodies; use testable models, services, or focused helpers according to the project style.
-- Split substantial new Swift types into separate files when creating production code.
-- For reviews, flag genuine problems only. Skip stylistic preferences unless they affect maintenance or app behavior.
-- Load only the references relevant to the task.
+## Defaults
 
-## Workflow
+- Target iOS 26+ and Swift 6.2+ for new code unless the project declares a lower deployment target.
+- Prefer SwiftUI-native APIs and Swift Concurrency.
+- Avoid UIKit unless SwiftUI has no suitable API, the project already depends on it, or the user asks.
+- Do not introduce third-party frameworks without asking.
+- Keep behavior changes explicit and avoid architecture rewrites during focused tasks.
+- Preserve project conventions when they are reasonable.
+- Report only genuine review findings: correctness, maintainability, project quality, performance, modern API usage, or data-flow problems.
 
-### Build New UI or Features
+## First Reference to Load
 
-1. Inspect the project target, file structure, data models, and existing style.
-2. Choose state ownership before writing views: owned state, injected read-only data, injected mutable data, environment values, and async work.
-3. Load `references/api-modernization.md`, `references/state-data-flow.md`, and whichever UI references match the feature.
-4. Implement with native controls, type-safe navigation, small views, clean actions, and predictable data flow.
-5. Add or update tests for non-trivial logic when the project has a test target.
+Start with `references/index.md`, then load the relevant topic files:
 
-### Review Existing Code
-
-1. Load `references/api-modernization.md` first.
-2. Route each concern through the Topic Router below.
-3. Group findings by file and severity. Include line references when available.
-4. For each issue, explain the rule and show a short before/after fix.
-5. End with the highest-impact fixes first.
-
-### Refactor or Modernize
-
-1. Preserve behavior and public interfaces unless the user asks for larger changes.
-2. Replace deprecated APIs with current iOS equivalents.
-3. Reduce broad state dependencies, long bodies, repeated transformations, and fragile navigation.
-4. Prefer small direct fixes over introducing new architecture.
-
-## Topic Router
-
-| Task area | Read |
+| Task | Required references |
 |---|---|
-| Deprecated or modern APIs | `references/api-modernization.md` |
-| State, bindings, shared models, SwiftData | `references/state-data-flow.md` |
-| View extraction, body hygiene, file shape | `references/view-composition.md` |
-| Navigation, sheets, alerts, dialogs | `references/navigation-presentation.md` |
-| Lists, `ForEach`, scroll views | `references/lists-scroll.md` |
-| Layout, visual design, system controls | `references/layout-design.md` |
-| Performance and hot paths | `references/performance.md` |
-| Animations and transitions | `references/animations.md` |
-| iOS 26 Liquid Glass | `references/liquid-glass.md` |
-| Images, text, formatting, string handling | `references/images-text.md` |
-| Swift 6.2, concurrency, code hygiene | `references/swift-hygiene.md` |
+| Build a feature or screen | `api-modernization.md`, `state-data-flow.md`, then UI topic files |
+| Review SwiftUI code | `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
+| Modernize deprecated code | `api-modernization.md`, plus affected topic files |
+| Fix state or data flow | `state-data-flow.md`, `performance.md` |
+| Navigation, sheets, alerts, dialogs | `navigation-presentation.md` |
+| Lists, tables, scrolling, empty states | `lists-scroll.md`, `performance.md` |
+| Layout and visual system consistency | `layout-design.md`, `view-composition.md` |
+| Animation or transitions | `animations.md`, `performance.md` |
+| Liquid Glass design work | `liquid-glass.md`, `api-modernization.md` |
+| Swift Charts | `charts.md`, `state-data-flow.md` |
+| Focus, keyboard, search, form input | `focus-input.md`, `api-modernization.md` |
+| Images, search, text, formatting | `images-text.md`, `performance.md` |
+| Swift language, concurrency, repo hygiene | `swift-hygiene.md` |
 
-## Core Checklist
+## Build Workflow
 
-- [ ] Use `@Observable` for new shared state and `@State` to own observable instances.
-- [ ] Mark view-owned `@State` as `private`.
-- [ ] Never declare parent-provided values as `@State` or `@StateObject`.
-- [ ] Use `@Binding` only when the child writes to parent state.
-- [ ] Use `@Bindable` for injected observable models that need bindings.
-- [ ] Use `NavigationStack` or iPad-appropriate `NavigationSplitView`, not `NavigationView`.
-- [ ] Use value-based navigation with `navigationDestination(for:)` where practical.
-- [ ] Use `.sheet(item:)` for optional model-driven sheets.
-- [ ] Use `Button` for tappable commands unless tap count or location is required.
-- [ ] Use stable identity in `ForEach`; never use `.indices` for dynamic content.
-- [ ] Keep `body` pure and light: no heavy sorting, decoding, networking, or object creation.
-- [ ] Use `.task` or `.task(id:)` for async work tied to view lifetime.
-- [ ] Use `.animation(_:value:)`; never use broad `.animation(_:)`.
-- [ ] Gate iOS 26 APIs with `#available` when supporting lower targets.
+1. Inspect the existing project target, folder structure, naming, state style, and dependencies.
+2. Identify owned state, injected read-only data, injected mutable data, environment values, and async work before editing.
+3. Choose native SwiftUI controls and APIs from the references.
+4. Keep view bodies simple: structure in the view, behavior in focused methods or models.
+5. Add tests for non-trivial logic if the project already has tests or the change introduces meaningful logic.
 
-## Review Output
+## Review Workflow
 
-For code reviews, use this compact shape:
+1. Check modern API usage first.
+2. Check state ownership, bindings, observable models, and async work.
+3. Check navigation and presentation consistency.
+4. Check view body size, extracted subviews, identity, list IDs, repeated transforms, and hot paths.
+5. Check Swift hygiene and project safety issues.
+6. Organize findings by file. For each finding, include severity, rule, impact, and a short before/after fix.
 
-- `### FileName.swift`
-- `**High: Problem title**`
-- One short paragraph explaining why it matters.
-- A small before/after Swift snippet.
-- `### Priority` with the highest-impact fixes first.
+## Refactor Workflow
+
+1. Preserve behavior unless the user asks for behavior changes.
+2. Make the smallest structural improvement that removes the real problem.
+3. Prefer direct SwiftUI modernization over adding new abstractions.
+4. Keep each extracted view or model purpose-specific.
+5. Re-run project checks available in the repo when practical.
+
+## Core Hard Rules
+
+- Use `@Observable` for new shared mutable state.
+- Use `@State` to own observable instances in views.
+- Mark view-owned `@State` and legacy `@StateObject` as `private`.
+- Never declare parent-provided values as `@State` or `@StateObject`.
+- Use `@Binding` only when the child writes parent state.
+- Use `@Bindable` when an injected observable model needs bindings.
+- Use `NavigationStack` or iPad-appropriate `NavigationSplitView`, not `NavigationView`.
+- Use `.sheet(item:)` for optional model-driven sheets.
+- Use `Button` for commands unless tap count or tap location is required.
+- Use stable identity in `ForEach`; never use `.indices` for dynamic content.
+- Keep `body` pure and cheap.
+- Use `.task` or `.task(id:)` for async work tied to view lifetime.
+- Use `.animation(_:value:)`, not broad `.animation(_:)`.
+- Gate iOS 26 APIs with `#available` if the app supports lower versions.
