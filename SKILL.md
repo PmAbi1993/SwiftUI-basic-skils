@@ -1,6 +1,6 @@
 ---
 name: swiftui-app-craft
-description: Build, review, and refactor iOS SwiftUI apps using a deep combined reference pack for modern APIs, Observation, SwiftData, navigation, layout, lists, scrolling, animation, Liquid Glass, performance, image/text handling, and Swift 6.2 hygiene.
+description: Build, review, and refactor iOS SwiftUI apps using a deep combined reference pack for modern APIs, Observation, SwiftData, navigation, layout, lists, scrolling, animation, performance, image/text handling, and Swift 6.2 hygiene.
 metadata:
   short-description: Deep iOS SwiftUI app craft reference pack
 ---
@@ -35,8 +35,6 @@ Start with `references/index.md`, then load the relevant topic files:
 | Lists, tables, scrolling, empty states | `lists-scroll.md`, `performance.md` |
 | Layout and visual system consistency | `layout-design.md`, `view-composition.md` |
 | Animation or transitions | `animations.md`, `performance.md` |
-| Liquid Glass design work | `liquid-glass.md`, `api-modernization.md` |
-| Swift Charts | `charts.md`, `state-data-flow.md` |
 | Focus, keyboard, search, form input | `focus-input.md`, `api-modernization.md` |
 | Images, search, text, formatting | `images-text.md`, `performance.md` |
 | Swift language, concurrency, repo hygiene | `swift-hygiene.md` |

@@ -116,12 +116,10 @@ Avoid integer or string tab selections in new code. Enums make tab state self-do
 
 Use these when the project target allows it or when guarded:
 
-- `glassEffect(_:in:)`, `GlassEffectContainer`, `.buttonStyle(.glass)`, and `.buttonStyle(.glassProminent)` for Liquid Glass surfaces.
 - `tabBarMinimizeBehavior(_:)` for tab bars that minimize during scroll.
 - `tabViewBottomAccessory` for persistent controls above the tab bar.
 - `Tab(role: .search)` for a dedicated search tab that can integrate with system search behavior.
 - `ToolbarSpacer` to visually group toolbar actions.
-- `sharedBackgroundVisibility(_:)` when a toolbar item should opt out of a shared glass background.
 - `badge(_:)` on toolbar item content for indicators.
 - `searchToolbarBehavior(.minimizable)` for compact search presentation.
 - `navigationZoomTransition`, `navigationTransitionSource`, and `navigationTransitionDestination` for source-based presentation transitions.
@@ -132,20 +130,6 @@ Use these when the project target allows it or when guarded:
 - SwiftUI `WebView` with `WebPage` for richer web interaction.
 - `dragContainer` and related drag session APIs for multi-item drag.
 - `@Animatable` and `@AnimatableIgnored` for animatable custom shapes and values.
-
-Example guarded glass:
-
-```swift
-if #available(iOS 26, *) {
-    content
-        .padding()
-        .glassEffect(.regular, in: .rect(cornerRadius: 18))
-} else {
-    content
-        .padding()
-        .background(.ultraThinMaterial, in: .rect(cornerRadius: 18))
-}
-```
 
 ## GeometryReader Alternatives
 
@@ -188,4 +172,3 @@ Text("^[\(people.count) person](inflect: true)")
 - [ ] No C-style formatting for user-facing values.
 - [ ] No string-based assets where generated symbols are available.
 - [ ] iOS 26 APIs are guarded when the project supports lower versions.
-

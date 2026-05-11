@@ -22,15 +22,13 @@ This folder is the copy-pasteable iOS SwiftUI reference pack. It intentionally f
 | `layout-design.md` | Relative layout, system controls, forms, labels, spacing, styling, design consistency |
 | `performance.md` | Redraw control, hot paths, lazy loading, view dependencies, body cost, advanced diffing |
 | `animations.md` | Implicit and explicit animation, transitions, matched geometry, transactions, phase/keyframes |
-| `liquid-glass.md` | iOS 26 Liquid Glass effects, containers, button styles, morphing, fallbacks |
-| `charts.md` | Swift Charts marks, axes, selection, styling, interaction, Chart3D, data modeling |
 | `focus-input.md` | Focus state, keyboard submit flows, search focus, forms, text input behavior |
 | `images-text.md` | AsyncImage, downsampling, SF Symbols, FormatStyle, localized strings, rich text |
 | `swift-hygiene.md` | Swift 6.2, concurrency, error handling, Foundation APIs, secrets, tests, lint cleanliness |
 
 ## Combined Source Roles
 
-- The broad expert source contributes deep references for state management, view composition, layout, lists, scrolling, animations, charts, images, Liquid Glass, and performance.
+- The broad expert source contributes deep references for state management, view composition, layout, lists, scrolling, animations, images, input handling, and performance.
 - The pro reviewer source contributes sharper project defaults: iOS 26+, Swift 6.2+, no third-party frameworks without asking, avoid UIKit unless needed, one substantial type per file, and findings that focus on real problems.
 
 ## Review Severity Guide

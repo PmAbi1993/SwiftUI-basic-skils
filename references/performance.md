@@ -192,8 +192,8 @@ Prefer:
 For expensive views with stable inputs, `Equatable` can help:
 
 ```swift
-struct PriceChartSummary: View, Equatable {
-    let points: [Point]
+struct RevenueSummary: View, Equatable {
+    let points: [DataPoint]
     let selectedRange: DateInterval
 
     static func == (lhs: Self, rhs: Self) -> Bool {
@@ -202,7 +202,7 @@ struct PriceChartSummary: View, Equatable {
     }
 
     var body: some View {
-        ChartSummary(points: points, range: selectedRange)
+        SummaryGraph(points: points, range: selectedRange)
     }
 }
 ```
@@ -280,4 +280,3 @@ let _ = Self._logChanges()
 - [ ] No unnecessary `AnyView`.
 - [ ] Environment state is not used for high-frequency per-row changes.
 - [ ] Advanced equality or wrapper optimizations are justified by cost.
-
