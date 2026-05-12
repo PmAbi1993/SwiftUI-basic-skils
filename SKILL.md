@@ -1,6 +1,6 @@
 ---
 name: swiftui-app-craft
-description: Build, review, and refactor iOS SwiftUI apps using a deep combined reference pack for modern APIs, Observation, SwiftData, navigation, layout, lists, scrolling, animation, performance, image/text handling, and Swift 6.2 hygiene.
+description: Build, review, post code reviews for, and refactor iOS SwiftUI apps using a deep combined reference pack for modern APIs, Observation, SwiftData, navigation, layout, lists, scrolling, animation, performance, image/text handling, and Swift 6.2 hygiene.
 metadata:
   short-description: Deep iOS SwiftUI app craft reference pack
 ---
@@ -28,7 +28,7 @@ Start with `references/index.md`, then load the relevant topic files:
 | Task | Required references |
 |---|---|
 | Build a feature or screen | `api-modernization.md`, `state-data-flow.md`, then UI topic files |
-| Review SwiftUI code | `review-template.md`, `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
+| Review SwiftUI code, branch, PR, or diff | `review-template.md`, `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
 | Modernize deprecated code | `api-modernization.md`, plus affected topic files |
 | Design or review MVVM structure | `mvvm.md`, `state-data-flow.md`, `view-composition.md` |
 | Fix state or data flow | `state-data-flow.md`, `performance.md` |
@@ -53,12 +53,15 @@ Start with `references/index.md`, then load the relevant topic files:
 ## Review Workflow
 
 1. Load `review-template.md` for the output structure.
-2. Check modern API usage first.
-3. Check state ownership, bindings, observable models, and async work.
-4. Check navigation and presentation consistency.
-5. Check view body size, extracted subviews, identity, list IDs, repeated transforms, and hot paths.
-6. Check Swift hygiene and project safety issues.
-7. Organize findings by severity and file. For each finding, include impact, location, and a concrete fix.
+2. Establish review scope: PR, branch comparison, local diff, or pasted diff.
+3. Read changed hunks plus enough surrounding code to understand state ownership, navigation, persistence, async work, and tests.
+4. Check modern API usage, availability, and project conventions.
+5. Check state ownership, bindings, observable models, and async work.
+6. Check navigation and presentation consistency.
+7. Check view body size, extracted subviews, identity, list IDs, repeated transforms, and hot paths.
+8. Check Swift hygiene, accessibility, privacy, tests, and project safety issues.
+9. Organize findings by severity and file. For each finding, include why it matters, failure mode, location, and a concrete fix.
+10. If posting a PR review, prefer inline comments for line-specific findings and a top-level review body for summary, scope, checklist, and fix order.
 
 ## Refactor Workflow
 

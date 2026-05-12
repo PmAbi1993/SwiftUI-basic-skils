@@ -14,7 +14,7 @@ This folder is the copy-pasteable iOS SwiftUI reference pack. It intentionally f
 
 | File | Use for |
 |---|---|
-| `review-template.md` | Standard review output format, severity definitions, finding format, checklist, and sign-off |
+| `review-template.md` | Branch, PR, and diff review workflow, posting template, severity definitions, finding format, why-first checklist, and sign-off |
 | `api-modernization.md` | Deprecated APIs, iOS version transitions, modern SwiftUI replacements, iOS 26 APIs |
 | `mvvm.md` | Practical SwiftUI MVVM boundaries, view model design, dependency injection, testing, anti-patterns |
 | `state-data-flow.md` | Observation, property wrappers, bindings, environment models, and SwiftData state rules |
