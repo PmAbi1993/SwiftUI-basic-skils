@@ -28,7 +28,7 @@ Start with `references/index.md`, then load the relevant topic files:
 | Task | Required references |
 |---|---|
 | Build a feature or screen | `api-modernization.md`, `state-data-flow.md`, then UI topic files |
-| Review SwiftUI code | `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
+| Review SwiftUI code | `review-template.md`, `api-modernization.md`, `view-composition.md`, `state-data-flow.md`, `performance.md` |
 | Modernize deprecated code | `api-modernization.md`, plus affected topic files |
 | Design or review MVVM structure | `mvvm.md`, `state-data-flow.md`, `view-composition.md` |
 | Fix state or data flow | `state-data-flow.md`, `performance.md` |
@@ -52,12 +52,13 @@ Start with `references/index.md`, then load the relevant topic files:
 
 ## Review Workflow
 
-1. Check modern API usage first.
-2. Check state ownership, bindings, observable models, and async work.
-3. Check navigation and presentation consistency.
-4. Check view body size, extracted subviews, identity, list IDs, repeated transforms, and hot paths.
-5. Check Swift hygiene and project safety issues.
-6. Organize findings by file. For each finding, include severity, rule, impact, and a short before/after fix.
+1. Load `review-template.md` for the output structure.
+2. Check modern API usage first.
+3. Check state ownership, bindings, observable models, and async work.
+4. Check navigation and presentation consistency.
+5. Check view body size, extracted subviews, identity, list IDs, repeated transforms, and hot paths.
+6. Check Swift hygiene and project safety issues.
+7. Organize findings by severity and file. For each finding, include impact, location, and a concrete fix.
 
 ## Refactor Workflow
 
